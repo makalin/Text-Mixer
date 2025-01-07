@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mixed Caps Text Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    textarea {
+      width: 80%;
+      height: 100px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .output {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mixed Caps Text Generator</h1>
+  <p>Enter your text below, and click "Generate" to mix uppercase and lowercase letters randomly.</p>
+  <textarea id="inputText" placeholder="Enter your text here..."></textarea><br>
+  <button onclick="generateMixedCaps()">Generate</button>
+  <div class="output" id="outputText"></div>
+
+  <script>
+    function generateMixedCaps() {
+      const inputText = document.getElementById('inputText').value;
+      let mixedText = '';
+
+      for (let char of inputText) {
+        if (Math.random() > 0.5) {
+          mixedText += char.toUpperCase();
+        } else {
+          mixedText += char.toLowerCase();
+        }
+      }
+
+      document.getElementById('outputText').textContent = mixedText;
+    }
+
+  </script>
+</body>
+</html>
