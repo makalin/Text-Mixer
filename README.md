@@ -69,11 +69,11 @@ This function:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/text-mixer.git
+   git clone https://github.com/makalin/Text-Mixer.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd text-mixer
+   cd Text-Mixer
    ```
 3. Open the `index.html` file in your preferred browser.
 
