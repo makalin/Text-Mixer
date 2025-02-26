@@ -2,7 +2,7 @@
 
 A web application that takes user input and randomly converts the text to mixed uppercase and lowercase letters. This project is a fun way to create text with a quirky style for memes, captions, or other creative uses.
 
-Live Preview: https://makalin.github.io/Text-Mixer/
+Live Preview: [https://makalin.github.io/Text-Mixer/](https://makalin.github.io/Text-Mixer/enhanced-mixed-caps-generator.html)
 
 ## Features
 
