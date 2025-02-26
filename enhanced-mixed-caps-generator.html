@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultimate Mixed Caps Text Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS Variables for Theming */
+    :root {
+      --bg-color: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --text-color: #333333;
+      --text-secondary: #666666;
+      --accent-color: #4a90e2;
+      --accent-hover: #3a7bc8;
+      --btn-bg: #4a90e2;
+      --btn-text: white;
+      --border-color: #cccccc;
+      --border-radius: 8px;
+      --output-bg: #f5f5f5;
+      --input-bg: white;
+      --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      --font-family: 'Arial', sans-serif;
+      --transition-speed: 0.3s;
+    }
+
+    /* Dark Theme */
+    .dark-theme {
+      --bg-color: #222222;
+      --bg-secondary: #2d2d2d;
+      --text-color: #f0f0f0;
+      --text-secondary: #bbbbbb;
+      --accent-color: #3a70b2;
+      --accent-hover: #2a5a9a;
+      --btn-bg: #3a70b2;
+      --btn-text: white;
+      --border-color: #444444;
+      --output-bg: #333333;
+      --input-bg: #2a2a2a;
+      --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* High Contrast Theme */
+    .high-contrast {
+      --bg-color: #000000;
+      --bg-secondary: #222222;
+      --text-color: #ffffff;
+      --text-secondary: #ffffff;
+      --accent-color: #ffff00;
+      --accent-hover: #e0e000;
+      --btn-bg: #ffff00;
+      --btn-text: #000000;
+      --border-color: #ffffff;
+      --output-bg: #000000;
+      --input-bg: #000000;
+      --box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Base Styles */
+    body {
+      font-family: var(--font-family);
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all var(--transition-speed) ease;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .theme-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    /* Main Panel Styles */
+    .main-panel {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .main-panel {
+        grid-template-columns: 3fr 1fr;
+      }
+    }
+
+    .editor-area {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Textarea and Output */
+    .text-container {
+      position: relative;
+      border-radius: var(--border-radius);
+      background-color: var(--bg-secondary);
+      box-shadow: var(--box-shadow);
+      padding: 15px;
+    }
+
+    .text-container label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .count-display {
+      position: absolute;
+      bottom: 10px;
+      right: 15px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 16px;
+      resize: vertical;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .output-container {
+      position: relative;
+      padding: 15px;
+      background-color: var(--output-bg);
+      border-radius: var(--border-radius);
+      min-height: 120px;
+      border: 1px solid var(--border-color);
+    }
+
+    .output {
+      font-size: 18px;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 15px;
+      cursor: pointer;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 4px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    button:hover {
+      background-color: var(--accent-hover);
+    }
+
+    button:focus {
+      outline: 3px solid var(--accent-color);
+      outline-offset: 2px;
+    }
+
+    button i {
+      font-size: 14px;
+    }
+
+    .text-action-btn {
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+    }
+
+    .text-action-btn:hover {
+      background-color: var(--border-color);
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: transparent;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--accent-color);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 4px;
+      box-shadow: var(--box-shadow);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Toggles and Controls */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    /* Settings Panel */
+    .settings-panel {
+      background-color: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .settings-group {
+      margin-bottom: 20px;
+    }
+
+    .settings-group h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 5px;
+    }
+
+    .setting-item {
+      margin-bottom: 15px;
+    }
+
+    .setting-item label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .probability-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .probability-control input[type="range"] {
+      flex-grow: 1;
+    }
+
+    .probability-control span {
+      min-width: 40px;
+      text-align: right;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      background-color: var(--input-bg);
+      color: var(--text-color);
+    }
+
+    /* History Panel */
+    .history-panel {
+      background-color: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .history-item {
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .history-item:hover {
+      background-color: var(--bg-color);
+    }
+
+    .history-item-text {
+      flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .history-actions button {
+      padding: 3px 7px;
+      font-size: 12px;
+    }
+
+    .history-empty {
+      font-style: italic;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    /* Statistics Panel */
+    .stats-panel {
+      display: flex;
+      justify-content: space-between;
+      background-color: var(--bg-secondary);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      margin-top: 20px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Easter Egg */
+    .easter-egg {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: transparent;
+      cursor: pointer;
+      z-index: 1000;
+      transition: all 0.3s;
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background-color: var(--bg-color);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .btn-group {
+        flex-direction: column;
+      }
+      
+      .stats-panel {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      
+      .stat-item {
+        width: calc(50% - 10px);
+      }
+    }
+
+    /* Animations */
+    @keyframes textFade {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animated-text {
+      animation: textFade 0.5s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-font"></i> Ultimate Mixed Caps Generator</h1>
+      <div class="theme-controls">
+        <button id="settingsToggle" aria-label="Open settings">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button id="themeBtn" aria-label="Change theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="main-panel">
+      <div class="editor-area">
+        <div class="text-container">
+          <label for="inputText">Input Text</label>
+          <textarea id="inputText" placeholder="Enter your text here..." aria-label="Input text"></textarea>
+          <div class="count-display" id="inputCount">Characters: 0 | Words: 0</div>
+        </div>
+
+        <div class="btn-group">
+          <button id="generateBtn" class="primary-btn">
+            <i class="fas fa-random"></i> Generate
+          </button>
+          <button id="clearBtn" class="text-action-btn">
+            <i class="fas fa-eraser"></i> Clear
+          </button>
+          <button id="autoUpdateToggle" class="text-action-btn">
+            <i class="fas fa-bolt"></i> Auto-Generate: Off
+          </button>
+        </div>
+
+        <div class="btn-group" id="transformBtns">
+          <button class="text-transform-btn" data-transform="random">
+            <i class="fas fa-dice"></i> Random Caps
+          </button>
+          <button class="text-transform-btn" data-transform="alternating">
+            <i class="fas fa-exchange-alt"></i> Alternating
+          </button>
+          <button class="text-transform-btn" data-transform="uppercase">
+            <i class="fas fa-arrow-up"></i> UPPERCASE
+          </button>
+          <button class="text-transform-btn" data-transform="lowercase">
+            <i class="fas fa-arrow-down"></i> lowercase
+          </button>
+          <button class="text-transform-btn" data-transform="title">
+            <i class="fas fa-heading"></i> Title Case
+          </button>
+          <button class="text-transform-btn" data-transform="spongebob">
+            <i class="fas fa-splotch"></i> SpOnGeBoB
+          </button>
+        </div>
+
+        <div class="output-container">
+          <label>Output Text</label>
+          <div class="output" id="outputText"></div>
+          <div class="count-display" id="outputCount">Characters: 0 | Words: 0</div>
+          <button class="copy-btn" id="copyButton">
+            <i class="fas fa-copy"></i> Copy
+          </button>
+        </div>
+
+        <div class="btn-group" id="exportBtns">
+          <button id="downloadBtn" class="text-action-btn">
+            <i class="fas fa-download"></i> Download Text
+          </button>
+          <button id="shareTwitterBtn" class="text-action-btn">
+            <i class="fab fa-twitter"></i> Share on Twitter
+          </button>
+          <button id="shareRedditBtn" class="text-action-btn">
+            <i class="fab fa-reddit"></i> Share on Reddit
+          </button>
+        </div>
+
+        <div class="stats-panel">
+          <div class="stat-item">
+            <div class="stat-value" id="charChangedCount">0</div>
+            <div class="stat-label">Characters Changed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="upperCount">0</div>
+            <div class="stat-label">Uppercase</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="lowerCount">0</div>
+            <div class="stat-label">Lowercase</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="transformCount">0</div>
+            <div class="stat-label">Transformations</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-panel" id="settingsPanel">
+        <div class="settings-group">
+          <h3>Randomization</h3>
+          <div class="setting-item">
+            <label for="upperProbability">Uppercase Probability: <span id="probDisplay">50</span>%</label>
+            <div class="probability-control">
+              <input type="range" id="upperProbability" min="0" max="100" value="50">
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3>Appearance</h3>
+          <div class="setting-item">
+            <label for="fontSelect">Font</label>
+            <select id="fontSelect">
+              <option value="Arial, sans-serif">Arial</option>
+              <option value="'Times New Roman', serif">Times New Roman</option>
+              <option value="'Courier New', monospace">Courier New</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="Verdana, sans-serif">Verdana</option>
+              <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+            </select>
+          </div>
+          <div class="setting-item">
+            <label for="themeSelect">Theme</label>
+            <select id="themeSelect">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="high-contrast">High Contrast</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3>Behavior</h3>
+          <div class="setting-item">
+            <label class="checkbox-label">
+              <input type="checkbox" id="autoGenerate"> 
+              Auto-generate as I type
+            </label>
+          </div>
+          <div class="setting-item">
+            <label class="checkbox-label">
+              <input type="checkbox" id="soundEffects"> 
+              Sound effects
+            </label>
+          </div>
+          <div class="setting-item">
+            <label class="checkbox-label">
+              <input type="checkbox" id="animations"> 
+              Text animations
+            </label>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3>Keyboard Shortcuts</h3>
+          <div class="setting-item">
+            <p><strong>Generate:</strong> Ctrl+Enter</p>
+            <p><strong>Copy:</strong> Ctrl+Shift+C</p>
+            <p><strong>Clear:</strong> Esc</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="history-panel">
+      <h3>History</h3>
+      <div id="historyList" class="history-list">
+        <div class="history-empty">No history yet. Generate some text!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="easter-egg" id="easterEgg"></div>
+  
+  <div class="modal" id="funFactModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModal">&times;</button>
+      <h3>Fun Typography Fact</h3>
+      <p id="funFactText"></p>
+    </div>
+  </div>
+
+  <div class="notification" id="notification"></div>
+
+  <script>
+    // DOM Elements
+    const inputText = document.getElementById('inputText');
+    const outputText = document.getElementById('outputText');
+    const generateBtn = document.getElementById('generateBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyButton = document.getElementById('copyButton');
+    const autoUpdateToggle = document.getElementById('autoUpdateToggle');
+    const notification = document.getElementById('notification');
+    const inputCount = document.getElementById('inputCount');
+    const outputCount = document.getElementById('outputCount');
+    const upperProbability = document.getElementById('upperProbability');
+    const probDisplay = document.getElementById('probDisplay');
+    const themeBtn = document.getElementById('themeBtn');
+    const themeSelect = document.getElementById('themeSelect');
+    const fontSelect = document.getElementById('fontSelect');
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const autoGenerate = document.getElementById('autoGenerate');
+    const soundEffects = document.getElementById('soundEffects');
+    const animations = document.getElementById('animations');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const shareTwitterBtn = document.getElementById('shareTwitterBtn');
+    const shareRedditBtn = document.getElementById('shareRedditBtn');
+    const historyList = document.getElementById('historyList');
+    const charChangedCount = document.getElementById('charChangedCount');
+    const upperCount = document.getElementById('upperCount');
+    const lowerCount = document.getElementById('lowerCount');
+    const transformCount = document.getElementById('transformCount');
+    const easterEgg = document.getElementById('easterEgg');
+    const funFactModal = document.getElementById('funFactModal');
+    const funFactText = document.getElementById('funFactText');
+    const closeModal = document.getElementById('closeModal');
+    const transformBtns = document.querySelectorAll('.text-transform-btn');
+
+    // State variables
+    let history = [];
+    let stats = {
+      transformations: 0,
+      charactersChanged: 0,
+      uppercase: 0,
+      lowercase: 0
+    };
+    let autoUpdateEnabled = false;
+    let typingTimer;
+    let currentTransform = 'random';
+    let easterEggClicks = 0;
+    let savedSettings = loadSettings();
+
+    // Fun facts for the easter egg
+    const funFacts = [
+      "The term 'uppercase' and 'lowercase' originated from the way type was stored in manual printing presses.",
+      "The lowercase 'e' is the most frequently used letter in the English language.",
+      "The exclamation point was introduced into English printing in the 15th century.",
+      "The @ symbol is called different names around the world - in Italian it's 'chiocciola' (snail).",
+      "The space is technically also a character, known as a 'whitespace character'.",
+      "The interrobang ‽ is a punctuation mark designed for rhetorical questions or excited queries.",
+      "Comic Sans was designed in 1994 by Vincent Connare for Microsoft.",
+      "The world's largest alphabet is Khmer (Cambodia) with 74 characters.",
+      "The alternating case style became popular through the 'SpongeBob meme'.",
+      "The first typewriter from 1868 could only type uppercase letters."
+    ];
+
+    // Sound effects
+    const generateSound = new Audio('data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQIAAAAAAA==');
+    const copySound = new Audio('data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQIAAAAAAA==');
+    const clickSound = new Audio('data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQIAAAAAAA==');
+
+    // Initialize
+    function init() {
+      applySettings();
+      updateCounters();
+      updateStats();
+      setupEventListeners();
+      updateHistoryPanel();
+    }
+
+    // Apply loaded settings
+    function applySettings() {
+      if (savedSettings) {
+        if (savedSettings.theme) {
+          themeSelect.value = savedSettings.theme;
+          applyTheme(savedSettings.theme);
+        }
+        
+        if (savedSettings.font) {
+          fontSelect.value = savedSettings.font;
+          document.documentElement.style.setProperty('--font-family', savedSettings.font);
+        }
+        
+        if (savedSettings.upperProbability) {
+          upperProbability.value = savedSettings.upperProbability;
+          probDisplay.textContent = savedSettings.upperProbability;
+        }
+        
+        autoGenerate.checked = savedSettings.autoGenerate || false;
+        autoUpdateEnabled = savedSettings.autoGenerate || false;
+        updateAutoGenerateButton();
+        
+        soundEffects.checked = savedSettings.soundEffects || false;
+        animations.checked = savedSettings.animations || false;
+      }
+    }
+
+    // Load settings from localStorage
+    function loadSettings() {
+      const settings = localStorage.getItem('mixedCapsSettings');
+      return settings ? JSON.parse(settings) : null;
+    }
+
+    // Save settings to localStorage
+    function saveSettings() {
+      const settings = {
+        theme: themeSelect.value,
+        font: fontSelect.value,
+        upperProbability: upperProbability.value,
+        autoGenerate: autoGenerate.checked,
+        soundEffects: soundEffects.checked,
+        animations: animations.checked
+      };
+      localStorage.setItem('mixedCapsSettings', JSON.stringify(settings));
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Main functionality
+      generateBtn.addEventListener('click', generateText);
+      clearBtn.addEventListener('click', clearText);
+      copyButton.addEventListener('click', copyText);
+      inputText.addEventListener('input', handleTextInput);
+      autoUpdateToggle.addEventListener('click', toggleAutoUpdate);
+      
+      // Settings controls
+      upperProbability.addEventListener('input', updateProbabilityDisplay);
+      themeSelect.addEventListener('change', () => applyTheme(themeSelect.value));
+      fontSelect.addEventListener('change', updateFont);
+      settingsToggle.addEventListener('click', toggleSettings);
+      themeBtn.addEventListener('click', cycleTheme);
+      
+      // Checkbox settings
+      autoGenerate.addEventListener('change', function() {
+        autoUpdateEnabled = this.checked;
+        updateAutoGenerateButton();
+        saveSettings();
+      });
+      
+      soundEffects.addEventListener('change', saveSettings);
+      animations.addEventListener('change', saveSettings);
+      
+      // Export buttons
+      downloadBtn.addEventListener('click', downloadText);
+      shareTwitterBtn.addEventListener('click', shareOnTwitter);
+      shareRedditBtn.addEventListener('click', shareOnReddit);
+      
+      // Transformation buttons
+      transformBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          currentTransform = this.dataset.transform;
+          generateText();
+        });
+      });
+      
+      // Easter egg
+      easterEgg.addEventListener('click', handleEasterEgg);
+      closeModal.addEventListener('click', () => funFactModal.classList.remove('show'));
+      
+      // Keyboard shortcuts
+      document.addEventListener('keydown', handleKeyboardShortcuts);
+    }
+
+    // Handle keyboard shortcuts
+    function handleKeyboardShortcuts(e) {
+      // Ctrl+Enter to generate
+      if (e.ctrlKey && e.key === 'Enter') {
+        generateText();
+        e.preventDefault();
+      }
+      
+      // Ctrl+Shift+C to copy
+      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        copyText();
+        e.preventDefault();
+      }
+      
+      // Esc to clear
+      if (e.key === 'Escape') {
+        clearText();
+        e.preventDefault();
+      }
+    }
+
+    // Handle text input
+    function handleTextInput() {
+      updateCounters();
+      
+      if (autoUpdateEnabled) {
+        // Debounce to prevent generating on every keystroke
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(generateText, 500);
+      }
+    }
+
+    // Toggle auto-update
+    function toggleAutoUpdate() {
+      autoUpdateEnabled = !autoUpdateEnabled;
+      autoGenerate.checked = autoUpdateEnabled;
+      updateAutoGenerateButton();
+      saveSettings();
+      
+      if (autoUpdateEnabled && inputText.value) {
+        generateText();
+      }
+    }
+
+    // Update auto-generate button text
+    function updateAutoGenerateButton() {
+      autoUpdateToggle.innerHTML = `<i class="fas fa-bolt"></i> Auto-Generate: ${autoUpdateEnabled ? 'On' : 'Off'}`;
+      autoUpdateToggle.classList.toggle('active', autoUpdateEnabled);
+    }
+
+    // Update probability display
+    function updateProbabilityDisplay() {
+      probDisplay.textContent = upperProbability.value;
+      saveSettings();
+    }
+
+    // Apply theme
+    function applyTheme(theme) {
+      document.body.classList.remove('dark-theme', 'high-contrast');
+      
+      if (theme === 'dark') {
+        document.body.classList.add('
