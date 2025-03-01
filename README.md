@@ -11,6 +11,9 @@ Live Preview: [https://makalin.github.io/Text-Mixer/](https://makalin.github.io/
 - Displays the mixed caps result dynamically.
 - Clean and responsive design for a better user experience.
 
+## Screenshots
+![Text Mixer Screenshot](screenshot.png)
+
 ## Demo
 
 You can try out the application live by opening the `index.html` file in any modern web browser.
